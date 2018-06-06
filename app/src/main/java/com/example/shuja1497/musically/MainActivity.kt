@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,7 +22,12 @@ class MainActivity : AppCompatActivity() {
 
             R.id.button_download->{
                 Toast.makeText(this, "Downloading", Toast.LENGTH_SHORT).show()
-                downloadSong()
+
+                thread(true,
+                        name = "DownloadThread",
+                        block = {
+                            downloadSong()
+                        })
             }
         }
     }
