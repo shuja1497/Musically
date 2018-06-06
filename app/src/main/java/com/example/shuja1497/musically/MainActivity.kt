@@ -23,21 +23,12 @@ class MainActivity : AppCompatActivity() {
             R.id.button_download->{
                 Toast.makeText(this, "Downloading", Toast.LENGTH_SHORT).show()
 
-                thread(true,
-                        name = "DownloadThread",
-                        block = {
-                            downloadSong()
-                        })
+                val thread = DownloadThread()
+                thread.name = "DownloadThread"
+                thread.start()
             }
         }
     }
 
-    private fun downloadSong() {
-        val endTime  = System.currentTimeMillis() + 10*1000
 
-        while (System.currentTimeMillis() < endTime){
-            Thread.sleep(1000)
-        }
-        Log.d(TAG, "Song downloaded")
-    }
 }
