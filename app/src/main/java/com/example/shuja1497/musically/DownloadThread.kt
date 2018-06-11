@@ -1,23 +1,20 @@
 package com.example.shuja1497.musically
 
+import android.os.Looper
 import android.util.Log
 
 class DownloadThread : Thread() {
 
     private val TAG = DownloadThread::class.java.simpleName
+    lateinit var downloadHandler: DownloadHandler
 
     override fun run() {
-        Playlist().playlist.forEach {
-            downloadSong()
-        }
-    }
 
-    private fun downloadSong() {
-        val endTime  = System.currentTimeMillis() + 10*1000
+        Looper.prepare() // creates a looper for a thread along witht the msg queue
+        downloadHandler = DownloadHandler()
+        // by default a handler is associated with the looper for the current thread.
+        // since this is inside the run method of download thread so it the current thread
 
-        while (System.currentTimeMillis() < endTime){
-            Thread.sleep(1000)
-        }
-        Log.d(TAG, "Song downloaded")
+        Looper.loop() // start looping over the msg queue
     }
 }
