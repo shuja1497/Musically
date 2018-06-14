@@ -20,6 +20,7 @@ class DownloadService: Service() {
         while (thread.downloadHandler==null){
         }
         downloadHandler = thread.downloadHandler
+        downloadHandler?.service =  this
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -27,6 +28,7 @@ class DownloadService: Service() {
 
         val message = Message.obtain()
         message.obj = song
+        message.arg1 = startId
         downloadHandler!!.sendMessage(message)
 
         return Service.START_REDELIVER_INTENT

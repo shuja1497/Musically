@@ -8,9 +8,12 @@ class DownloadHandler : Handler() {
 
     private val TAG = DownloadHandler::class.java.simpleName
 
+    lateinit var service: DownloadService
+
     override fun handleMessage(msg: Message?) {
 
         downloadSong(msg!!.obj.toString())
+        service.stopSelf(msg.arg1)
 
     }
 
