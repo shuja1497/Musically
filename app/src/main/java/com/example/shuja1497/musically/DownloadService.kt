@@ -3,28 +3,33 @@ package com.example.shuja1497.musically
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
+import android.os.Message
 import android.util.Log
 
 class DownloadService: Service() {
 
     private val TAG = DownloadService::class.java.simpleName
 
+    private  var downloadHandler: DownloadHandler? = null
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+    override fun onCreate() {
+        val thread = DownloadThread()
+        thread.name = "DownloadThread"
+        thread.start()
 
-
-        val song  = intent!!.extras!!.getString(MainActivity().SONG_KEY)
-        downloadSong(song)
-        return Service.START_REDELIVER_INTENT
+        while (thread.downloadHandler==null){
+        }
+        downloadHandler = thread.downloadHandler
     }
 
-    private fun downloadSong(song: String) {
-        val endTime  = System.currentTimeMillis() + 10*1000
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        val song  = intent!!.extras!!.getString(MainActivity().SONG_KEY)
 
-        while (System.currentTimeMillis() < endTime){
-            Thread.sleep(1000)
-        }
-        Log.d(TAG, "$song downloaded")
+        val message = Message.obtain()
+        message.obj = song
+        downloadHandler!!.sendMessage(message)
+
+        return Service.START_REDELIVER_INTENT
     }
 
     override fun onBind(intent: Intent?): IBinder? {

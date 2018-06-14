@@ -6,7 +6,7 @@ import android.util.Log
 class DownloadThread : Thread() {
 
     private val TAG = DownloadThread::class.java.simpleName
-    lateinit var downloadHandler: DownloadHandler
+    var downloadHandler: DownloadHandler? = null
 
     override fun run() {
 
