@@ -24,7 +24,8 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "Downloading", Toast.LENGTH_SHORT).show()
             // send msgs  to handler for processing
             Playlist().playlist.forEach {
-                val intent = Intent(this, DownloadService::class.java )
+//                val intent = Intent(this, DownloadService::class.java )
+                val intent = Intent(this, DownloadIntentService::class.java )
                 intent.putExtra(SONG_KEY, it)
                 startService(intent)
             }
