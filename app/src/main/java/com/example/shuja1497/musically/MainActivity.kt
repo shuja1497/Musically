@@ -1,6 +1,8 @@
 package com.example.shuja1497.musically
 
+import android.content.Context
 import android.content.Intent
+import android.content.ServiceConnection
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Message
@@ -12,13 +14,14 @@ import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity() {
 
-    val TAG = MainActivity::class.java.simpleName
     val  SONG_KEY = "song"
+    private  var serviceConnection: ServiceConnection = MyServiceConnection()
+    var mBound = false
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
 
         button_download.setOnClickListener {
             Toast.makeText(this, "Downloading", Toast.LENGTH_SHORT).show()
@@ -29,6 +32,24 @@ class MainActivity : AppCompatActivity() {
                 intent.putExtra(SONG_KEY, it)
                 startService(intent)
             }
+        }
+
+        buttonPlay.setOnClickListener {
+
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        bindService(Intent(this,PlayerService::class.java), serviceConnection,
+                Context.BIND_AUTO_CREATE)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (mBound) {
+            unbindService(serviceConnection)
+            mBound = false
         }
     }
 }
