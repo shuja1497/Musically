@@ -3,14 +3,16 @@ package com.example.shuja1497.musically
 import android.app.Service
 import android.content.Intent
 import android.media.MediaPlayer
+import android.os.Binder
 import android.os.IBinder
 import android.provider.MediaStore
 import android.util.Log
 
 class PlayerService : Service() {
 
-    private lateinit var mediaPlayer: MediaPlayer
+    private var mediaPlayer: MediaPlayer? = null
     val TAG = PlayerService::class.java.simpleName
+    private var mBinder: IBinder = LocalBinder()
 
     override fun onCreate() {
         Log.d(TAG, "onCreate")
@@ -19,7 +21,7 @@ class PlayerService : Service() {
 
     override fun onBind(intent: Intent?): IBinder? {
         Log.d(TAG, "onBind")
-        return null
+        return mBinder
     }
 
     override fun onUnbind(intent: Intent?): Boolean {
@@ -29,16 +31,30 @@ class PlayerService : Service() {
 
     override fun onDestroy() {
         Log.d(TAG, "onDestroy")
-        mediaPlayer.release()
+        mediaPlayer!!.release()
     }
+
+    // making a class extending Binder to connect the service with the activity.
+
+    inner class LocalBinder: Binder(){
+
+        fun getService(): PlayerService{
+            return this@PlayerService
+        }
+    }
+
 
     // client methods
 
     fun play(){
-        mediaPlayer.start()
+        mediaPlayer!!.start()
     }
 
     fun pause(){
-        mediaPlayer.pause()
+        mediaPlayer!!.pause()
+    }
+
+    fun isPlaying() : Boolean{
+        return mediaPlayer!!.isPlaying
     }
 }

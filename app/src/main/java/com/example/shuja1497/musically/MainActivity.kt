@@ -12,12 +12,13 @@ import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlin.concurrent.thread
 
-class MainActivity : AppCompatActivity() {
+var playerService: PlayerService = PlayerService()
+var mBound = false
+
+class MainActivity : AppCompatActivity()  {
 
     val  SONG_KEY = "song"
     private  var serviceConnection: ServiceConnection = MyServiceConnection()
-    var mBound = false
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,8 +37,19 @@ class MainActivity : AppCompatActivity() {
 
         buttonPlay.setOnClickListener {
 
+            if (mBound){
+                if(playerService.isPlaying()){
+                    playerService.pause()
+                    buttonPlay.text = "Play"
+                }else{
+                    playerService.play()
+                    buttonPlay.text = "Pause"
+                }
+            }
         }
     }
+
+
 
     override fun onStart() {
         super.onStart()
