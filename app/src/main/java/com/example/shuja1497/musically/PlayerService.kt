@@ -5,7 +5,6 @@ import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Binder
 import android.os.IBinder
-import android.provider.MediaStore
 import android.util.Log
 
 class PlayerService : Service() {
@@ -17,6 +16,13 @@ class PlayerService : Service() {
     override fun onCreate() {
         Log.d(TAG, "onCreate")
         mediaPlayer = MediaPlayer.create(this, R.raw.jingle)
+    }
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        mediaPlayer!!.setOnCompletionListener {
+            stopSelf() // stops service immediately
+        }
+        return Service.START_NOT_STICKY
     }
 
     override fun onBind(intent: Intent?): IBinder? {
