@@ -5,13 +5,15 @@ import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Binder
 import android.os.IBinder
+import android.os.Message
+import android.os.Messenger
 import android.util.Log
 
 class PlayerService : Service() {
 
     private var mediaPlayer: MediaPlayer? = null
     val TAG = PlayerService::class.java.simpleName
-    private var mBinder: IBinder = LocalBinder()
+    val messenger: Messenger = Messenger(PlayerHandler(this))
 
     override fun onCreate() {
         Log.d(TAG, "onCreate")
@@ -27,7 +29,7 @@ class PlayerService : Service() {
 
     override fun onBind(intent: Intent?): IBinder? {
         Log.d(TAG, "onBind")
-        return mBinder
+        return messenger.binder
     }
 
     override fun onUnbind(intent: Intent?): Boolean {
@@ -39,16 +41,6 @@ class PlayerService : Service() {
         Log.d(TAG, "onDestroy")
         mediaPlayer!!.release()
     }
-
-    // making a class extending Binder to connect the service with the activity.
-
-    inner class LocalBinder: Binder(){
-
-        fun getService(): PlayerService{
-            return this@PlayerService
-        }
-    }
-
 
     // client methods
 
