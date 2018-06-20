@@ -1,5 +1,6 @@
 package com.example.shuja1497.musically
 
+import android.app.Notification
 import android.app.Service
 import android.content.Intent
 import android.media.MediaPlayer
@@ -21,8 +22,16 @@ class PlayerService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+
+        // making notification
+        val notificationBuilder = Notification.Builder(this)
+        notificationBuilder.setSmallIcon(R.mipmap.ic_launcher)
+        val notification = notificationBuilder.build()
+        startForeground(1, notification) // 0 id is not allowed
+
         mediaPlayer!!.setOnCompletionListener {
             stopSelf() // stops service immediately
+            stopForeground(true)
         }
         return Service.START_NOT_STICKY
     }
