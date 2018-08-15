@@ -48,8 +48,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        Toast.makeText(this, "", Toast.LENGTH_SHORT).show()
-
         buttonPlay = findViewById(R.id.buttonPlay)
 
         button_download.setOnClickListener {
